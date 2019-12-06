@@ -6,7 +6,11 @@ import psycopg2
 # Third argument is SV_PASSWORD
 # Fourth argument is BD_NAME
 
-filename = "schema.sql"
+schemas = ['produto',
+           'cliente',
+           'similares',
+           'categoria',
+           'review']
 
 # Check if there is 4 args
 if (len(sys.argv) != 5):
@@ -14,7 +18,6 @@ if (len(sys.argv) != 5):
     exit()
 
 SV_ADDRESS, SV_USER, SV_PASSWORD, BD_NAME = sys.argv[1:]
-
 
 try:
     con = psycopg2.connect(host=SV_ADDRESS, database=BD_NAME,
@@ -26,11 +29,14 @@ except:
 
 cur = con.cursor()
 
-sql = open("schemas/schema.sql").read()
-cur.execute(sql)
-con.commit()
-# cur.execute('select * from cidade;')
-# recset = cur.fetchall()
-# for rec in recset:
-#     print(rec)
+for nome in schemas:
+    with open("schemas/schema_" + nome + ".sql") as file:
+        sql = file.read()
+
+    try:
+        cur.execute(sql)
+        con.commit()
+    except:
+        print("error in " + nome + "'s schema :(")
+
 con.close()

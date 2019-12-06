@@ -1,4 +1,4 @@
-CREATE TABLE Review
+CREATE TABLE IF NOT EXISTS Review
 (
     Data DATE NOT NULL,
     Aval INT NOT NULL,

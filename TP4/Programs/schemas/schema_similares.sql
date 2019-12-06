@@ -1,4 +1,4 @@
-CREATE TABLE Similares
+CREATE TABLE IF NOT EXISTS Similares
 (
     ID_produto INT NOT NULL,
     ID_similar INT NOT NULL CHECK (ID_produto <> ID_similar),
