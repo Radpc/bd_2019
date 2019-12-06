@@ -1,0 +1,9 @@
+CREATE TABLE Produto
+(
+    ASIN CHAR(10) NOT NULL,
+    ID_produto INT NOT NULL,
+    Nome VARCHAR(300) NOT NULL,
+    Rank INT NOT NULL CHECK (Rank >= 0),
+    PRIMARY KEY (ASIN)
+);
+

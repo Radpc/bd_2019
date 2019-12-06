@@ -15,11 +15,22 @@ if (len(sys.argv) != 5):
 
 SV_ADDRESS, SV_USER, SV_PASSWORD, BD_NAME = sys.argv[1:]
 
-# con = psycopg2.connect(host=SV_ADDRESS, database=BD_NAME,
-#                       user=SV_USER, password=SV_PASSWORD)
 
-#cur = con.cursor()
+try:
+    con = psycopg2.connect(host=SV_ADDRESS, database=BD_NAME,
+                           user=SV_USER, password=SV_PASSWORD)
+except:
+    print("Connection could not been made!")
+    exit()
 
 
-with open(filename, "r") as f:
-    print(f.read())
+cur = con.cursor()
+
+sql = open("schemas/schema.sql").read()
+cur.execute(sql)
+con.commit()
+# cur.execute('select * from cidade;')
+# recset = cur.fetchall()
+# for rec in recset:
+#     print(rec)
+con.close()
