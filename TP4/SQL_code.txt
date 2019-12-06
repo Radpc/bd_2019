@@ -1,0 +1,46 @@
+CREATE TABLE Cliente
+(
+  ID_Cliente CHAR(14) NOT NULL CHECK (ID_Cliente >= 0),
+  PRIMARY KEY (ID_Cliente)
+);
+
+CREATE TABLE Similaridades
+(
+  ID_Produto INT NOT NULL CHECK (ID_Produto >= 0),
+  PRIMARY KEY (ID_Produto)
+);
+
+CREATE TABLE Produto
+(
+  ID_Produto INT NOT NULL CHECK (ID_Produto >= 0),
+  ASIN CHAR(10) NOT NULL,
+  Rank INT NOT NULL CHECK (Rank >= 0),
+  Nome VARCHAR NOT NULL,
+  ID_Produto INT CHECK (ID_Produto >= 0),
+  PRIMARY KEY (ID_Produto),
+  FOREIGN KEY (ID_Produto) REFERENCES Similaridades(ID_Produto),
+  UNIQUE (Nome)
+);
+
+CREATE TABLE Review
+(
+  Data DATE NOT NULL,
+  Avaliação INT NOT NULL,
+  N_Util INT NOT NULL CHECK (N_Util >= 0),
+  N_Votos INT NOT NULL CHECK (N_Votos >= 0),
+  ID_Produto INT NOT NULL CHECK (ID_Produto >= 0),
+  ID_Cliente CHAR(14) NOT NULL,
+  PRIMARY KEY (Data),
+  FOREIGN KEY (ID_Produto) REFERENCES Produto(ID_Produto),
+  FOREIGN KEY (ID_Cliente) REFERENCES Cliente(ID_Cliente)
+);
+
+CREATE TABLE Categoria
+(
+  Grupo VARCHAR NOT NULL,
+  Quantidade INT NOT NULL CHECK (Quantidade >= 0),
+  Nome_Categoria VARCHAR NOT NULL,
+  ID_Categoria INT NOT NULL CHECK (ID_Categoria >= 0),
+  ID_Produto INT NOT NULL CHECK (ID_Produto >= 0),
+  FOREIGN KEY (ID_Produto) REFERENCES Produto(ID_Produto)
+);
