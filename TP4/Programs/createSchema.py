@@ -39,4 +39,3 @@ for name in schemas:
         print("error in " + name + "'s schema :(")
 
 con.close()
-

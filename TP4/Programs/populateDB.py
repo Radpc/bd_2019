@@ -31,52 +31,84 @@ import psycopg2
 
 # STATUS
 
+product = {
+    'id': '',
+    'asin': '',
+    'title': '',
+    'group': '',
+    'salesrank': ''
+}
+
+
+def generateSQLProduct(product):
+    return 'INSERT INTO produto VALUES (' + \
+        product['id'] + ',' + '\'' + \
+        product['asin'] + '\',\'' + product['title'] + \
+        '\',\'' + product['group'] + '\',' + product['salesrank'] + ');'
+
+# ---------------------------------------------------------------------------
+
+
 def checkId(line):
     if line[:3] == 'Id:':
-        return line.split()[1].strip()
+        product['id'] = line.split()[1].strip()
+        return True
     else:
         return False
 
 
 def checkAsin(line):
     if line[:5] == 'ASIN:':
-        return line.split()[1].strip()
+        product['asin'] = line.split()[1].strip()
+        return True
     else:
         return False
 
 
 def checkTitle(line):
     if line[:8] == '  title:':
-        return line[9:]
+        product['title'] = line[9:-1]
+        return True
     else:
         return False
 
 
 def checkGroup(line):
     if line[:8] == '  group:':
-        return line[9:]
+        product['group'] = line[9:-1]
+        return True
     else:
         return False
 
 
+# FINAL
 def checkSalesrank(line):
     if line[:12] == '  salesrank:':
-        return line.split()[1].strip()
+        product['salesrank'] = line.split()[1].strip()
+        sql = generateSQLProduct(product)
+        print(sql)
+        return True
     else:
         return False
-    pass
+# ---------------------------------------------------------------------------
 
 
 def checkSimilar(line):
     pass
 
+# ---------------------------------------------------------------------------
+
 
 def checkCategories(line):
     pass
 
+# ---------------------------------------------------------------------------
+
 
 def checkReview(line):
     pass
+
+# ---------------------------------------------------------------------------
 
 
 functions = {'id': checkId,
@@ -93,13 +125,26 @@ order = ['id', 'asin', 'title', 'group',
 
 n = 0
 
+
 with open('../test_file.txt', 'r') as file:
     for line in file:
-        check_for = functions[order[n]]
-        if check_for(line):
-            if n < len(order):
+
+        # PRODUCT
+        if n < 5:
+            if functions[order[n]](line):
                 n += 1
             else:
                 n = 0
-        else:
-            n = 0
+
+        # SIMILARS
+        elif n == 6:
+
+            pass
+
+        # CATEGORIES
+        elif n == 7:
+            pass
+
+        # REVIEWS
+        elif n == 8:
+            pass
