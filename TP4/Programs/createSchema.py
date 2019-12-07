@@ -29,14 +29,14 @@ except:
 
 cur = con.cursor()
 
-for nome in schemas:
-    with open("schemas/schema_" + nome + ".sql") as file:
+for name in schemas:
+    with open("schemas/schema_" + name + ".sql") as file:
         sql = file.read()
-
     try:
         cur.execute(sql)
         con.commit()
     except:
-        print("error in " + nome + "'s schema :(")
+        print("error in " + name + "'s schema :(")
 
 con.close()
+
