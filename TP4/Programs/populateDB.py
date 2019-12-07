@@ -32,26 +32,28 @@ import psycopg2
 # STATUS
 
 product = {
-    'id': '',
+    # 'id': '',
     'asin': '',
     'title': '',
     'group': '',
     'salesrank': ''
 }
 
+similars = []
+similar_f = open('similars.txt', 'w')
+
 
 def generateSQLProduct(product):
-    return 'INSERT INTO produto VALUES (' + \
-        product['id'] + ',' + '\'' + \
-        product['asin'] + '\',\'' + product['title'] + \
+    return 'INSERT INTO produto VALUES (\'' + product['asin'] + '\',\'' + product['title'] + \
         '\',\'' + product['group'] + '\',' + product['salesrank'] + ');'
+
 
 # ---------------------------------------------------------------------------
 
 
 def checkId(line):
     if line[:3] == 'Id:':
-        product['id'] = line.split()[1].strip()
+        # product['id'] = line.split()[1].strip()
         return True
     else:
         return False
@@ -94,6 +96,18 @@ def checkSalesrank(line):
 
 
 def checkSimilar(line):
+    if line[:10] == '  similar:':
+        similars = line.strip().split()[2:]
+
+        if similars != []:
+            similar_f.write(product['asin'])
+            for s in similars:
+                similar_f.write(" " + s)
+            similar_f.write("\n")
+        return True
+    else:
+        return False
+
     pass
 
 # ---------------------------------------------------------------------------
@@ -111,17 +125,18 @@ def checkReview(line):
 # ---------------------------------------------------------------------------
 
 
-functions = {'id': checkId,
-             'asin': checkAsin,
-             'title': checkTitle,
-             'group': checkGroup,
-             'salesrank': checkSalesrank,
-             'similar': checkSimilar,
-             'categories': checkCategories,
-             'reviews': checkReview}
+functions = {  # 'id': checkId,
+    'asin': checkAsin,
+    'title': checkTitle,
+    'group': checkGroup,
+    'salesrank': checkSalesrank,
+    'similar': checkSimilar,
+    'categories': checkCategories,
+    'reviews': checkReview}
 
-order = ['id', 'asin', 'title', 'group',
-         'salesrank', 'similar', 'categories', 'reviews']
+order = [  # 'id',
+    'asin', 'title', 'group',
+    'salesrank', 'similar', 'categories', 'reviews']
 
 n = 0
 
@@ -130,21 +145,26 @@ with open('../test_file.txt', 'r') as file:
     for line in file:
 
         # PRODUCT
-        if n < 5:
+        if n < 4:
             if functions[order[n]](line):
                 n += 1
             else:
                 n = 0
 
         # SIMILARS
-        elif n == 6:
-
-            pass
+        elif n == 4:
+            if functions[order[n]](line):
+                n = 0
+            else:
+                n = 0
 
         # CATEGORIES
-        elif n == 7:
+        elif n == 5:
             pass
 
         # REVIEWS
-        elif n == 8:
+        elif n == 6:
             pass
+
+
+similar_f.close()

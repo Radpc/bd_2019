@@ -7,7 +7,6 @@ import psycopg2
 # Fourth argument is BD_NAME
 
 schemas = ['produto',
-           'cliente',
            'similares',
            'categoria',
            'review']
