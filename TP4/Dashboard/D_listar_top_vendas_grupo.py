@@ -17,7 +17,7 @@ if (len(sys.argv) == 1):
             SV_USER = ls[1].split()[1]
             SV_PASSWORD = ls[2].split()[1]
             BD_NAME = ls[3].split()[1]
-            busca = ls[4].split()[1]
+            busca = ls[5].split()[1].lower()
     except:
         print("Invalid arguments!")
         exit()
@@ -29,7 +29,7 @@ elif (len(sys.argv) == 2):
             SV_USER = ls[1].split()[1]
             SV_PASSWORD = ls[2].split()[1]
             BD_NAME = ls[3].split()[1]
-            busca = sys.argv[1].lower()
+            busca = sys.argv[1]
     except:
         print("Invalid arguments!")
         exit()
@@ -46,12 +46,8 @@ except:
 
 cur = con.cursor()
 
-if (len(busca) == 10):
-    sql = "SELECT asin,nome FROM produto WHERE asin ='" + \
-        busca + "' OR lower(nome) LIKE '%" + busca + "%';"
-else:
-    sql = "SELECT asin,nome FROM produto WHERE lower(nome) LIKE '%" + \
-        busca + "%';"
+sql = "SELECT nome, categoria, rank FROM produto JOIN categorizacao ON \
+    asin_produto = asin WHERE lower(categoria) LIKE '%" + busca + "%' ORDER BY rank LIMIT 10;"
 
 cur.execute(sql)
 
@@ -61,44 +57,10 @@ if len(results) == 0:
     print("No results found :(")
     exit()
 
-# Checar reviews
+print("Resultados para o TOP 10 de [" + busca.capitalize() + "]\n")
 
-asin = results[0][0]
-nome = results[0][1]
-
-
-# Checar review uteis e boas
-print("Evolução das avaliações de  [" + nome + "]")
-print("-------------------------------------------")
-
-sql = "SELECT * FROM review WHERE asin_produto = '" + \
-    asin + "' ORDER BY data DESC;"
-cur.execute(sql)
-reviews = cur.fetchall()
-
-
-def average(l):
-    return sum(l)/len(l)
-
-
-evolucao = []
-dia = 0
-notas = []
-
-for review in reviews:
-    if (review[2] != dia):
-        if (dia != 0):
-            evolucao.append([dia, average(notas)])
-        dia = review[2]
-        notas = [review[3]]
-    else:
-        notas.append(review[3])
-
-if (len(notas) != 0):
-    evolucao.append([dia, average(notas)])
-
-for e in evolucao:
-    print(str(e[0]) + " - Nota " + str(e[1]))
+for result in results:
+    print("Posicao " + str(result[2]) + "º - [" + result[0] + "]")
 
 
 con.close()

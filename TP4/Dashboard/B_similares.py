@@ -29,7 +29,7 @@ elif (len(sys.argv) == 2):
             SV_USER = ls[1].split()[1]
             SV_PASSWORD = ls[2].split()[1]
             BD_NAME = ls[3].split()[1]
-            busca = sys.argv[1]
+            busca = sys.argv[1].lower()
     except:
         print("Invalid arguments!")
         exit()

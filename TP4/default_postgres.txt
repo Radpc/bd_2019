@@ -3,3 +3,5 @@ SV_USER postgres
 SV_PASSWORD postgres
 BD_NAME amazon
 busca 0827229534
+categoria Books
+populate_file ../amazon-meta.txt

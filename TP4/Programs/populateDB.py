@@ -11,7 +11,7 @@ filename = 'amazon-meta.txt'
 # Fourth argument is BD_NAME
 
 # # Check if there is 4 args
-if (len(sys.argv) != 5):
+if (len(sys.argv) == 1):
     try:
         with open('../default_postgres.txt', 'r') as f:
             ls = f.readlines()
@@ -19,11 +19,27 @@ if (len(sys.argv) != 5):
             SV_USER = ls[1].split()[1]
             SV_PASSWORD = ls[2].split()[1]
             BD_NAME = ls[3].split()[1]
+            filename = ls[6].split()[1]
     except:
         print("Invalid arguments!")
         exit()
-else:
+elif (len(sys.argv) == 2):
+    try:
+        with open('../default_postgres.txt', 'r') as f:
+            ls = f.readlines()
+            SV_ADDRESS = ls[0].split()[1]
+            SV_USER = ls[1].split()[1]
+            SV_PASSWORD = ls[2].split()[1]
+            BD_NAME = ls[3].split()[1]
+            filename = sys.argv[1]
+    except:
+        print("Invalid arguments!")
+        exit()
+
+elif (len(sys.argv) == 5):
     SV_ADDRESS, SV_USER, SV_PASSWORD, BD_NAME = sys.argv[1:]
+else:
+    SV_ADDRESS, SV_USER, SV_PASSWORD, BD_NAME, filename = sys.argv[1:]
 
 
 try:
@@ -216,7 +232,7 @@ order = [  # 'id',
 n = 0
 l_number = 0
 
-with open('../' + filename, 'r') as file:
+with open(filename, 'r') as file:
     for line in file:
         n += functions[order[n]](line)
         l_number += 1

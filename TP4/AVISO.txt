@@ -1,0 +1,1 @@
+O arquivo amazon-meta.txt é uma versão menor do arquivo original, pois estava muito demorado o processo. Caso seja necessário um teste com o original, uma forma rápida seria somente dar overwrite no arquivo com o verdadeiro.
