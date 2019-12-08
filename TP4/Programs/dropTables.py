@@ -39,16 +39,13 @@ schemas = ['produto',
            'review']
 
 for name in schemas:
-    with open("schemas/schema_" + name + ".sql") as file:
-        sql = file.read()
     try:
-        cur.execute(sql)
+        cur.execute('DROP TABLE ' + name + ' cascade')
         con.commit()
     except:
-        print("error in " + name + "'s schema :(")
+        print("Failed in dropping " + name +
+              "'s schema. Does it really exist?")
         exit()
 
-print("Tables created!")
-
-
+print("Dropped tables successfully!")
 con.close()

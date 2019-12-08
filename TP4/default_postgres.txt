@@ -1,0 +1,4 @@
+SV_ADDRESS localhost
+SV_USER postgres
+SV_PASSWORD postgres
+BD_NAME amazon
