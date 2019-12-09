@@ -1,0 +1,12 @@
+Dockerfile*
+Trabalho.pdf
+docker-compose*
+.dockerignore
+.git
+.gitignore
+README.md
+LICENSE
+.vscode
+bin
+*.swp
+csv_files/*.db
